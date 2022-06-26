@@ -6,52 +6,31 @@ const fs = require("fs");
 
 
 async function main() {
-  getContractBytecode('exampleQuery.sol');
+  const compilerOutput = getCompilerOutput('exampleQuery.sol', 'Query');
+
+  const queryFactory = ethers.ContractFactory.fromSolidity(compilerOutput);
+  const bytecode = queryFactory.bytecode;
+
+
+  const Oracle = await hre.ethers.getContractFactory('Oracle');
+  const oracle = await Oracle.deploy();
+
+
+  const test = await oracle.callStatic.run(bytecode);
+
+  console.log(ethers.utils.toUtf8String(test));
 }
 
 
 
-function getContractBytecode(contractFilename) {
+function getCompilerOutput(contractFilename, contractName) {
+
   const content = getContractContent(contractFilename);
+  const input = `{"language":"Solidity","sources":{"${contractFilename}":{"content":${JSON.stringify(content)}}},"settings":{"outputSelection":{"*":{"*":["*"]}}}}`;
+  const output = JSON.parse(solc.compile(input, { import: importCallback })).contracts[contractFilename][contractName];
 
-
-
-  var input = {
-    language: 'Solidity',
-    sources: {
-      'test.sol': {
-        content
-      }
-    },
-    settings: {
-      outputSelection: {
-        '*': {
-          '*': ['*']
-        }
-      }
-    }
-  };
-  
-  var output = JSON.parse(solc.compile(JSON.stringify(input), { import: importCallback }));
-  
-  // `output` here contains the JSON output as specified in the documentation
-
-
-  console.log(output);
-/*   for (var contractName in output.contracts['test.sol']) {
-    console.log(
-      contractName +
-        ': ' +
-        output.contracts['test.sol'][contractName].evm.bytecode.object
-    );
-  }*/
-
-
-
-
+  return output;
 }
-
-
 
 
 
@@ -59,8 +38,6 @@ function getContractContent(contractFilename) {
   const content = fs.readFileSync(`contracts/${contractFilename}`).toString();
   return content;
 }
-
-
 
 
 function importCallback(contractFilename) {
