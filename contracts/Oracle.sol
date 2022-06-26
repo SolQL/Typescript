@@ -5,7 +5,9 @@ import "./exampleQuery.sol";
 
 
 contract Oracle {
+    
     function run(bytes memory bytecode) external returns(bytes memory result) {
+
         ISolQL query = ISolQL(deployContractFromBytecode(bytecode));
         result = query.query();
 
