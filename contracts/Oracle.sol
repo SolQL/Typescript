@@ -1,4 +1,4 @@
-pragma solidity ^0.8.0;
+pragma solidity =0.5.16;
 
 
 import "./exampleQuery.sol";
@@ -6,7 +6,7 @@ import "./exampleQuery.sol";
 
 contract Oracle {
     
-    function run(bytes memory bytecode) external returns(bytes memory result) {
+    function run(bytes memory bytecode) public returns(bytes memory result) {
 
         ISolQL query = ISolQL(deployContractFromBytecode(bytecode));
         result = query.query();
@@ -20,4 +20,5 @@ contract Oracle {
             queryContract := create(0, add(bytecode, 0x20), mload(bytecode))
         }
     }
+    
 }

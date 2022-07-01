@@ -9,6 +9,7 @@ class Query {
       const compiler = new Compiler(fileName, contractName);
       this.ethersContractFactory = ethers.ContractFactory.fromSolidity(compiler.output);
       this.oracle = new ethers.Contract(oracleAddress, ["function run(bytes memory) external returns(bytes memory)"], provider);
+      return this;
     }
 
     async run() {

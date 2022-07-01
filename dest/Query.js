@@ -17,6 +17,7 @@ class Query {
         const compiler = new Compiler_1.Compiler(fileName, contractName);
         this.ethersContractFactory = ethers_1.ethers.ContractFactory.fromSolidity(compiler.output);
         this.oracle = new ethers_1.ethers.Contract(oracleAddress, ["function run(bytes memory) external returns(bytes memory)"], provider);
+        return this;
     }
     run() {
         return __awaiter(this, void 0, void 0, function* () {
