@@ -16,22 +16,26 @@ class Compiler {
   }
 
   getCompilerOutput() {
-    const content = this.getContractContent(this.fileName);
+    const content = this.getContractContent();
     const input = `{"language":"Solidity","sources":{"${this.fileName}":{"content":${JSON.stringify(content)}}},"settings":{"outputSelection":{"*":{"*":["*"]}}}}`;
-    const output = JSON.parse(solc.compile(input, { import: this.importCallback })).contracts[this.fileName][this.contractName];
+    
+    const compilerOutputObject = JSON.parse(solc.compile(input, { import: this.importCallback }));
+    console.log(compilerOutputObject);
+    const output = compilerOutputObject.contracts[this.fileName][this.contractName];
   
     return output;
   }
 
 
-  getContractContent(fileName: string): string {
-    const content = fs.readFileSync(`contracts/${this.fileName}`).toString();
+  getContractContent(): string {
+    console.log(process.cwd());
+    const content = fs.readFileSync(`${this.fileName}`).toString();
     return content;
   }
 
 
-  importCallback(fileName: string): object {
-    const contents = this.getContractContent(fileName);
+  importCallback(): object {
+    const contents = this.getContractContent();
     const output = (contents.length > 1) ? { contents } : { error: 'File not found'};
     return output;
   }
