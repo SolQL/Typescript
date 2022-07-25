@@ -3,13 +3,13 @@ import { ethers } from "ethers"
 
 
 
-interface IOracleContract {
+interface IOracle {
     contractObject: ethers.Contract
     runQuery(queryBytecode: string): Promise<Object>
 }
 
 
-
+//constants on oracle deployments. 
 const ORACLE_ABI = ["function run(bytes memory) external returns(bytes memory)"]
 const ORACLE_ADDRESSES: {[chainID: string]: string} = {
     "5": "0x3db0fB82e35765b788558cAf538D68b60F4fEE98"
@@ -22,7 +22,7 @@ const ORACLE_ADDRESSES: {[chainID: string]: string} = {
 
 
 
-class OracleContract implements IOracleContract {
+class Oracle implements IOracle {
     contractObject: ethers.Contract
 
     /*
@@ -35,7 +35,7 @@ class OracleContract implements IOracleContract {
     constructor(chainID: string, provider: ethers.providers.Provider) {
 
         //address and abi needed to instantiate a Contract object.
-        const address = OracleContract.getAddress(chainID);
+        const address = Oracle.getAddress(chainID);
         const abi = ORACLE_ABI;
 
         this.contractObject = new ethers.Contract(address, abi, provider);
@@ -51,4 +51,4 @@ class OracleContract implements IOracleContract {
 }
 
 
-export { OracleContract };
+export { Oracle };

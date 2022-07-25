@@ -14,9 +14,22 @@ interface ICompiler {
 
 
 
+/*
+    Wrapper class for full compiler implementations.
+*/
+class Compiler implements ICompiler {
+    compileFromTarget(targetName: string): Promise<string> {
+        return new Promise((resolve, reject) => null);
+    }
+}
 
 
-class HardhatDependentCompiler implements ICompiler {
+
+
+
+
+
+class HardhatDependentCompiler extends Compiler {
 
     /*
         Since we do not care about anything other than the bytecode, since
@@ -38,4 +51,4 @@ class HardhatDependentCompiler implements ICompiler {
 
 
 
-export { HardhatDependentCompiler };
+export { Compiler, HardhatDependentCompiler };

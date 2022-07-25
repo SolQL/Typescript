@@ -1,37 +1,40 @@
 import { ethers } from "ethers";
+import { Oracle } from "./Oracle";
+import { Compiler } from "./Compiler";
 
 import { default as h } from "hardhat";
 const hre: any = h;
 
 
-
-
-class Query {
-    bytecode: string;
-    oracle: ethers.Contract;
-
-    constructor(bytecode: string, oracleAddress: string, provider: ethers.providers.Provider) {
-      this.oracle = new ethers.Contract(oracleAddress, ["function run(bytes memory) external returns(bytes memory)"], provider);
-      this.bytecode = bytecode;
-      return this;
-    }
-
-    static async runFromContract(contractName: string, oracleAddress: string, provider: ethers.providers.Provider) {
-      const bytecode = (await hre.ethers.getContractFactory(contractName)).bytecode;
-      const query = new Query(bytecode, oracleAddress, provider);
-      const result = query.run();
-      return result;
-    }
-
-
-    async run() {
-      const result = await this.oracle.callStatic.run(this.bytecode);
-      return result;
-    }
+interface IQuery {
+  oracle: Oracle
+  compiler: Compiler
+  run(): Promise<Object>
+}
 
 
 
+class Query implements IQuery {
+
+  oracle: Oracle
+  compiler: Compiler
+  targetName: string
+
+  
+  constructor(compiler: Compiler, targetName: string, chainID: string, provider: ethers.providers.Provider) {
+    this.oracle = new Oracle(chainID, provider);
+    this.compiler = compiler;
+    this.targetName = targetName;
   }
+
+
+  async run() {
+    const bytecode = await this.compiler.compileFromTarget(this.targetName);
+    const rawQueryResult = await this.oracle.runQuery(bytecode);
+    return rawQueryResult;
+  }
+
+}
 
 
 

@@ -9,22 +9,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OracleContract = void 0;
+exports.Oracle = void 0;
 const ethers_1 = require("ethers");
-const ORACLE_CONSTANTS = {
-    abi: ["function run(bytes memory) external returns(bytes memory)"],
-    //chainid: address 
-    getAddress(chainID) {
-        const addresses = {
-            "5": "0x3db0fB82e35765b788558cAf538D68b60F4fEE98"
-        };
-        return addresses[chainID];
-    }
+//constants on oracle deployments. 
+const ORACLE_ABI = ["function run(bytes memory) external returns(bytes memory)"];
+const ORACLE_ADDRESSES = {
+    "5": "0x3db0fB82e35765b788558cAf538D68b60F4fEE98"
 };
-class OracleContract {
+class Oracle {
     constructor(chainID, provider) {
-        this.contractObject = new ethers_1.ethers.Contract(ORACLE_CONSTANTS.getAddress(chainID), ORACLE_CONSTANTS.abi, provider);
+        //address and abi needed to instantiate a Contract object.
+        const address = Oracle.getAddress(chainID);
+        const abi = ORACLE_ABI;
+        this.contractObject = new ethers_1.ethers.Contract(address, abi, provider);
     }
+    /*
+        Gets deployed address of the oracle contract on the specified chain.
+    */
+    static getAddress(chainID) {
+        return ORACLE_ADDRESSES[chainID];
+    }
+    /*
+        Runs the bytecode of a query and returns the bytes[] result. Result not decoded yet.
+    */
     runQuery(queryBytecode) {
         return __awaiter(this, void 0, void 0, function* () {
             const rawQueryResult = yield this.contractObject.callStatic.run(queryBytecode);
@@ -32,4 +39,4 @@ class OracleContract {
         });
     }
 }
-exports.OracleContract = OracleContract;
+exports.Oracle = Oracle;

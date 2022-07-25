@@ -12,10 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HardhatDependentCompiler = void 0;
+exports.HardhatDependentCompiler = exports.Compiler = void 0;
 const hardhat_1 = __importDefault(require("hardhat"));
 const hre = hardhat_1.default;
-class HardhatDependentCompiler {
+/*
+    Wrapper class for full compiler implementations.
+*/
+class Compiler {
+    compileFromTarget(targetName) {
+        return new Promise((resolve, reject) => null);
+    }
+}
+exports.Compiler = Compiler;
+class HardhatDependentCompiler extends Compiler {
     /*
         Since we do not care about anything other than the bytecode, since
         the bytecode is the only component we send to the Oracle contract,
