@@ -1,22 +1,36 @@
 import { ethers } from "ethers";
-import { Compiler } from "./Compiler";
+
+import { default as h } from "hardhat";
+const hre: any = h;
+
+
+
 
 class Query {
-    ethersContractFactory: ethers.ContractFactory;
+    bytecode: string;
     oracle: ethers.Contract;
 
-    constructor(fileName: string, contractName: string, oracleAddress: string, provider: ethers.providers.Provider) {
-      const compiler = new Compiler(fileName, contractName);
-      this.ethersContractFactory = ethers.ContractFactory.fromSolidity(compiler.output);
+    constructor(bytecode: string, oracleAddress: string, provider: ethers.providers.Provider) {
       this.oracle = new ethers.Contract(oracleAddress, ["function run(bytes memory) external returns(bytes memory)"], provider);
+      this.bytecode = bytecode;
       return this;
     }
 
-    async run() {
-      const bytecode = this.ethersContractFactory.bytecode;
-      const result = await this.oracle.callStatic.run(bytecode);
+    static async runFromContract(contractName: string, oracleAddress: string, provider: ethers.providers.Provider) {
+      const bytecode = (await hre.ethers.getContractFactory(contractName)).bytecode;
+      const query = new Query(bytecode, oracleAddress, provider);
+      const result = query.run();
       return result;
     }
+
+
+    async run() {
+      const result = await this.oracle.callStatic.run(this.bytecode);
+      return result;
+    }
+
+
+
   }
 
 

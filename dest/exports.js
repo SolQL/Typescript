@@ -1,5 +1,5 @@
 const { Query } = require("./Query");
-const { Compiler } = require("./Compiler")
+const { HardhatDependentCompiler } = require("./Compiler")
 
 
-module.exports = { Query, Compiler };
+module.exports = { Query, HardhatDependentCompiler };
