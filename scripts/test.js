@@ -1,15 +1,13 @@
 const { ethers } = require("ethers");
-const { Query, HardhatDependentCompiler } = require("../dest/exports");
+const { Query, HardhatDependentCompiler, OracleContract } = require("../dest/exports");
 
 const hre = require("hardhat");
-
 const oracleAddress = "0x3db0fB82e35765b788558cAf538D68b60F4fEE98";
 
 
-
-
 async function main() {
-  await testHardhatDependentCompiler();
+  //await testHardhatDependentCompiler();
+  await testOracleContract();
 }
 
 
@@ -23,6 +21,12 @@ async function testHardhatDependentCompiler() {
   return bytecode;
 }
 
+
+async function testOracleContract() {
+  const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL);
+  const oracle = new OracleContract("5", provider);
+  console.log(oracle.contractObject);
+}
 
 
 
