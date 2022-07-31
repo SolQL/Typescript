@@ -1,5 +1,7 @@
 {
-  "name": "hardhat-project",
+  "name": "solql",
+  "author": {"name": ""},
+  "main": "dest/index.js",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
