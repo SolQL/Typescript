@@ -1,7 +1,6 @@
 const { ethers } = require("ethers");
-const { Query, HardhatDependentCompiler, OracleContract } = require("../dest/exports");
-
-const hre = require("hardhat");
+const { Query, HardhatDependentCompiler, Oracle, StandaloneCompiler } = require("../dest/exports");
+//const hre = require("hardhat");
 
 
 async function main() {
@@ -22,9 +21,9 @@ async function testHardhatDependentCompiler() {
 }
 
 
-async function testOracleContract() {
+async function testOracle() {
   const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL);
-  const oracle = new OracleContract("5", provider);
+  const oracle = new Oracle("5", provider);
   console.log(oracle.contractObject);
 }
 
@@ -39,6 +38,10 @@ async function testQuery() {
   console.log(result)
   return result;
 }
+
+
+
+
 
 
 

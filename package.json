@@ -1,6 +1,7 @@
 {
   "name": "solql",
-  "author": {"name": ""},
+  "version": "0.0.1",
+  "author": "sha256yan",
   "main": "dest/index.js",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.6",
