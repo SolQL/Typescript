@@ -1,19 +1,34 @@
 const { ethers } = require("ethers");
-const { Query, HardhatDependentCompiler, Oracle, StandaloneCompiler } = require("../dest/exports");
-//const hre = require("hardhat");
+const {
+  Query,
+  HardhatDependentQuery,
+  HardhatDependentCompiler,
+  Oracle,
+  StandaloneCompiler
+} = require("../dest/index");
 
 
 async function main() {
-  //await testHardhatDependentCompiler();
-  //await testOracleContract();
-  //await testQuery();
+  /*
+  const result = await testQuery(process.env.GOERLI_URL, "Query", "5");
+  console.log(result);
+  */
+
+
+
+  /* 
+  const result = await testHardhatDependentQuery(process.env.GOERLI_URL, "Query", "5");
+  console.log(result);
+  */
 }
 
 
 
-async function testHardhatDependentCompiler() {
+
+
+async function testHardhatDependentCompiler(queryContractName) {
   const compiler = new HardhatDependentCompiler();
-  const bytecode = await compiler.compileFromTarget("Query");
+  const bytecode = await compiler.compileFromTarget(queryContractName);
 
   //Only a visual inspection of compiled bytecode. Correctness of compilation not tested. 
   console.log(bytecode);
@@ -21,27 +36,36 @@ async function testHardhatDependentCompiler() {
 }
 
 
-async function testOracle() {
-  const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL);
-  const oracle = new Oracle("5", provider);
+
+
+
+async function testOracle(providerUrl, chainId) {
+  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+  const oracle = new Oracle(chainId, provider);
   console.log(oracle.contractObject);
 }
 
 
 
-async function testQuery() {
-  const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_URL);
-  const compiler = new HardhatDependentCompiler();
+async function testQuery(providerUrl, queryContractName, chainId) {
+  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
 
-  const query = new Query(compiler, "Query", "5", provider);
+  const compiler = new HardhatDependentCompiler();
+  const query = new Query(queryContractName, chainId, provider, compiler);
   const result = await query.run();
-  console.log(result)
+  
   return result;
 }
 
 
 
+async function testHardhatDependentQuery(providerUrl, queryContractName, chainId) {
+  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+  const query = new HardhatDependentQuery(queryContractName, chainId, provider);
 
+  const result = await query.run();
+  return result;
+}
 
 
 
