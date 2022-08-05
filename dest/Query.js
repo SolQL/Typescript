@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HardhatDependentQuery = exports.Query = void 0;
 const Oracle_1 = require("./Oracle");
-const Compiler_1 = require("./Compiler");
+const Compiler_1 = require("./compile/Compiler");
 const hardhat_1 = __importDefault(require("hardhat"));
 const hre = hardhat_1.default;
 class Query {

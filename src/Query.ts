@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { Oracle } from "./Oracle";
-import { Compiler, HardhatDependentCompiler } from "./Compiler";
+import { Compiler, HardhatDependentCompiler } from "./compile/Compiler";
 
 import { default as h } from "hardhat";
 const hre: any = h;

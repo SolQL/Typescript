@@ -53,48 +53,63 @@ class HardhatDependentCompiler extends Compiler {
 
 
 
+
+
+
+
 class StandaloneCompiler extends Compiler {
     compileFromTarget(targetName: string): Promise<string> {
-        var input = {
-            language: 'Solidity',
-            sources: {
-              'test.sol': {
-                content: 'import "lib.sol"; contract C { function f() public { L.f(); } }'
-              }
-            },
-            settings: {
-              outputSelection: {
-                '*': {
-                  '*': ['*']
-                }
+      /*
+        Takes a string as input
+      */
+
+
+
+        //Standard solidity compiler input format: https://docs.soliditylang.org/en/v0.5.0/using-the-compiler.html#compiler-input-and-output-json-description
+
+        //recall: 1 .sol file can have multiple contract objects
+
+        const sourceName = "query.sol";
+        const content = 'import "lib.sol"; contract C { function f() public { L.f(); } }';
+
+        const sources: ICompilerInputSources = {};
+        sources[sourceName] = {content};
+
+        const input: ICompilerInputJson  = {
+          language: 'Solidity',
+          sources,
+          settings: {
+            outputSelection: {
+              '*' : {
+                '*': ['*']
               }
             }
-          };
-
-
-          
-
-
-
-          
-          // New syntax (supported from 0.5.12, mandatory from 0.6.0)
-          var output = JSON.parse(
-            solc.compile(JSON.stringify(input), { import: this.findImports })
-          );
-
-
-
-
-          
-          // `output` here contains the JSON output as specified in the documentation
-          for (var contractName in output.contracts['test.sol']) {
-            console.log(
-              contractName +
-                ': ' +
-                output.contracts['test.sol'][contractName].evm.bytecode.object
-            );
           }
-        return new Promise((res, rej) => null);
+        }
+          
+      // New syntax (supported from 0.5.12, mandatory from 0.6.0)
+      //example using import callback function
+
+      var output: ICompilerOutput = JSON.parse(
+        solc.compile(JSON.stringify(input), { import: this.findImports })
+      );
+
+      output.errors.map(error => console.log(error.formattedMessage))
+
+      
+      // `output` here contains the JSON output as specified in the documentation
+      for (var contractName in output.contracts['query.sol']) {
+        console.log(
+          contractName +
+            ': ' +
+            output.contracts['query.sol'][contractName].evm.bytecode.object
+        );
+      }
+
+
+      return new Promise((res, rej) => null);
+
+
     }
 
 
