@@ -2,8 +2,6 @@ import { ethers } from "ethers";
 import { Oracle } from "./Oracle";
 import { Compiler, HardhatDependentCompiler } from "./Compiler";
 
-import { default as h } from "hardhat";
-const hre: any = h;
 
 
 interface IQuery {
@@ -18,11 +16,13 @@ class Query implements IQuery {
   oracle: Oracle
   compiler: Compiler | undefined
   targetName: string
+  hre: any
   
-  constructor(targetName: string, chainID: string, provider: ethers.providers.Provider, compiler?: Compiler) {
+  constructor(targetName: string, chainID: string, provider: ethers.providers.Provider, hre: any, compiler?: Compiler) {
     this.oracle = new Oracle(chainID, provider);
     this.compiler = compiler;
     this.targetName = targetName;
+    this.hre = hre;
   }
 
 
@@ -45,9 +45,9 @@ class Query implements IQuery {
 
 
 class HardhatDependentQuery extends Query {
-  constructor(targetName: string, chainID: string, provider: ethers.providers.Provider) {
-    super(targetName, chainID, provider);
-    this.compiler = new HardhatDependentCompiler();
+  constructor(targetName: string, chainID: string, provider: ethers.providers.Provider, hre: any) {
+    super(targetName, chainID, provider, hre);
+    this.compiler = new HardhatDependentCompiler(hre);
   }
 }
 

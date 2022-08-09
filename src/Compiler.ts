@@ -1,6 +1,5 @@
-import { default as h } from "hardhat";
 const solc = require('solc');
-const hre: any = h;
+
 
 
 /*
@@ -15,10 +14,17 @@ interface ICompiler {
 
 
 
+
 /*
     Wrapper class for full compiler implementations.
 */
 class Compiler implements ICompiler {
+    hre: any
+
+    constructor(hre: Object) {
+      this.hre = hre;
+    }
+
     compileFromTarget(targetName: string): Promise<string> {
         return new Promise((resolve, reject) => null);
     }
@@ -38,7 +44,7 @@ class HardhatDependentCompiler extends Compiler {
         we discard the ContractFactory object and only keep the bytecode. 
     */
     async compileFromTarget(targetName: string): Promise<string> {
-        const bytecodePromise = hre.ethers.getContractFactory(targetName)
+        const bytecodePromise = this.hre.ethers.getContractFactory(targetName)
         .then((contractFactory: any) => contractFactory.bytecode)
         .catch((error: Error) => {
             console.error(error)
