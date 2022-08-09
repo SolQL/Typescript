@@ -1,6 +1,5 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity =0.5.16;
-import "./UniswapV2Factory.sol";
 
 
 interface ISolQL {
@@ -17,17 +16,6 @@ contract Query is ISolQL {
 
 
         address uniV2Factory = 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f;
-        //uint pairs = IUniswapV2Factory(uniV2Factory).allPairsLength();
-        //return abi.encodePacked(pairs);
-
-
-
-        address[10] memory tokens;
-        for(uint i; i < 10; i++) {
-            tokens[i] = (IUniswapV2Pair(IUniswapV2Factory(uniV2Factory).allPairs(i)).token0());
-        }
-
-        return abi.encodePacked(tokens);
     }
 
 

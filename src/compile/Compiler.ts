@@ -57,20 +57,15 @@ class HardhatDependentCompiler extends Compiler {
 
 
 
-class StandaloneCompiler extends Compiler {
-    compileFromTarget(targetName: string): Promise<string> {
+class StandaloneCompiler {
+    compileFromString(sourceName: string, content: string): void {
       /*
         Takes a string as input
       */
 
-
-
         //Standard solidity compiler input format: https://docs.soliditylang.org/en/v0.5.0/using-the-compiler.html#compiler-input-and-output-json-description
 
         //recall: 1 .sol file can have multiple contract objects
-
-        const sourceName = "query.sol";
-        const content = 'import "lib.sol"; contract C { function f() public { L.f(); } }';
 
         const sources: ICompilerInputSources = {};
         sources[sourceName] = {content};
@@ -90,24 +85,22 @@ class StandaloneCompiler extends Compiler {
       // New syntax (supported from 0.5.12, mandatory from 0.6.0)
       //example using import callback function
 
-      var output: ICompilerOutput = JSON.parse(
-        solc.compile(JSON.stringify(input), { import: this.findImports })
-      );
+      var output: ICompilerOutput = this.solcCompile(input, solc);
+      console.log(output)
+/*       var output: ICompilerOutput;
 
-      output.errors.map(error => console.log(error.formattedMessage))
+      solc.loadRemoteVersion('0.6.0', (err: any, solcSnapshot: any) => {
+        if(err) {
+          console.log(err);
+          return;
+        }
+        else{
+          output = this.solcCompile(input, solcSnapshot);
+          console.log(output);
+        }
+      }); */
 
-      
-      // `output` here contains the JSON output as specified in the documentation
-      for (var contractName in output.contracts['query.sol']) {
-        console.log(
-          contractName +
-            ': ' +
-            output.contracts['query.sol'][contractName].evm.bytecode.object
-        );
-      }
 
-
-      return new Promise((res, rej) => null);
 
 
     }
@@ -121,6 +114,26 @@ class StandaloneCompiler extends Compiler {
             'library L { function f() internal returns (uint) { return 7; } }'
         };
       else return { error: 'File not found' };
+    }
+
+
+    solcCompile(input: ICompilerInputJson, solcSnapshot: any) {
+      const stringifiedInput = JSON.stringify(input);
+      const stringifiedOutput = solcSnapshot.compile(stringifiedInput, { import: this.findImports });
+
+      const output: ICompilerOutput = JSON.parse(stringifiedOutput);
+      return output;
+    }
+
+
+
+    logCompilerErrors(output: ICompilerOutput) {
+      for(let i = 0; i < output.errors.length; i++) {
+        console.log(output.errors[i]);
+      }
+
+
+
     }
 
 
