@@ -8,20 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HardhatDependentQuery = exports.Query = void 0;
 const Oracle_1 = require("./Oracle");
 const Compiler_1 = require("./Compiler");
-const hardhat_1 = __importDefault(require("hardhat"));
-const hre = hardhat_1.default;
 class Query {
-    constructor(targetName, chainID, provider, compiler) {
+    constructor(targetName, chainID, provider, hre, compiler) {
         this.oracle = new Oracle_1.Oracle(chainID, provider);
         this.compiler = compiler;
         this.targetName = targetName;
+        this.hre = hre;
     }
     run() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -36,9 +32,9 @@ class Query {
 }
 exports.Query = Query;
 class HardhatDependentQuery extends Query {
-    constructor(targetName, chainID, provider) {
-        super(targetName, chainID, provider);
-        this.compiler = new Compiler_1.HardhatDependentCompiler();
+    constructor(targetName, chainID, provider, hre) {
+        super(targetName, chainID, provider, hre);
+        this.compiler = new Compiler_1.HardhatDependentCompiler(hre);
     }
 }
 exports.HardhatDependentQuery = HardhatDependentQuery;

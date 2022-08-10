@@ -22,8 +22,8 @@ contract Query is ISolQL {
 
 
 
-        address[10] memory tokens;
-        for(uint i; i < 10; i++) {
+        address[3] memory tokens;
+        for(uint i; i < 3; i++) {
             tokens[i] = (IUniswapV2Pair(IUniswapV2Factory(uniV2Factory).allPairs(i)).token0());
         }
 

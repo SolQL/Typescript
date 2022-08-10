@@ -20,9 +20,16 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.5.16",
   networks: {
+
+    hardhat: {
+      forking: {
+        url: process.env.GOERLI_URL
+      }
+    },
+
     goerli: {
       url: process.env.GOERLI_URL,
-      accounts: [ process.env.GOERLI_PRIVATE_KEY ]
+      //accounts: [ process.env.GOERLI_PRIVATE_KEY ]
     }
   }
 };

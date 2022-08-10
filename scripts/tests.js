@@ -8,20 +8,6 @@ const {
 } = require("../dest/index");
 
 
-async function main() {
-  /*
-  const result = await testQuery(process.env.GOERLI_URL, "Query", "5");
-  console.log(result);
-  */
-
-
-
-  /* 
-  const result = await testHardhatDependentQuery(process.env.GOERLI_URL, "Query", "5");
-  console.log(result);
-  */
-}
-
 
 
 
@@ -61,7 +47,7 @@ async function testQuery(providerUrl, queryContractName, chainId) {
 
 async function testHardhatDependentQuery(providerUrl, queryContractName, chainId) {
   const provider = new ethers.providers.JsonRpcProvider(providerUrl);
-  const query = new HardhatDependentQuery(queryContractName, chainId, provider);
+  const query = new HardhatDependentQuery(queryContractName, chainId, provider, hre);
 
   const result = await query.run();
   return result;
@@ -71,9 +57,5 @@ async function testHardhatDependentQuery(providerUrl, queryContractName, chainId
 
 
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+
+module.exports = { testHardhatDependentQuery };

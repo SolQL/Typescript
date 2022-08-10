@@ -8,18 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StandaloneCompiler = exports.HardhatDependentCompiler = exports.Compiler = void 0;
-const hardhat_1 = __importDefault(require("hardhat"));
 const solc = require('solc');
-const hre = hardhat_1.default;
 /*
     Wrapper class for full compiler implementations.
 */
 class Compiler {
+    constructor(hre) {
+        this.hre = hre;
+    }
     compileFromTarget(targetName) {
         return new Promise((resolve, reject) => null);
     }
@@ -33,7 +31,7 @@ class HardhatDependentCompiler extends Compiler {
     */
     compileFromTarget(targetName) {
         return __awaiter(this, void 0, void 0, function* () {
-            const bytecodePromise = hre.ethers.getContractFactory(targetName)
+            const bytecodePromise = this.hre.ethers.getContractFactory(targetName)
                 .then((contractFactory) => contractFactory.bytecode)
                 .catch((error) => {
                 console.error(error);
