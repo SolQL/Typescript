@@ -19,11 +19,6 @@ interface ICompiler {
     Wrapper class for full compiler implementations.
 */
 class Compiler implements ICompiler {
-    hre: any
-
-    constructor(hre: Object) {
-      this.hre = hre;
-    }
 
     compileFromTarget(targetName: string): Promise<string> {
         return new Promise((resolve, reject) => null);
@@ -39,10 +34,17 @@ class Compiler implements ICompiler {
 class HardhatDependentCompiler extends Compiler {
 
     /*
-        Since we do not care about anything other than the bytecode, since
-        the bytecode is the only component we send to the Oracle contract, 
-        we discard the ContractFactory object and only keep the bytecode. 
+      Needs to recieve hre as a constructor arguement when
+      hre is loaded. (cannot import hre inside the hardhat.config.js file).
     */
+
+    hre: any;
+
+    constructor(hre: any) {
+      super();
+      this.hre = hre;
+    }
+
     async compileFromTarget(targetName: string): Promise<string> {
         const bytecodePromise = this.hre.ethers.getContractFactory(targetName)
         .then((contractFactory: any) => contractFactory.bytecode)
@@ -60,6 +62,10 @@ class HardhatDependentCompiler extends Compiler {
 
 
 class StandaloneCompiler extends Compiler {
+  /*
+    UNDER DEVELOPMENT.
+    To be used to compile queries independlty of hardhat.
+  */
     compileFromTarget(targetName: string): Promise<string> {
         var input = {
             language: 'Solidity',

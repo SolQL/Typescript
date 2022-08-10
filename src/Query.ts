@@ -17,13 +17,11 @@ class Query implements IQuery {
   oracle: Oracle
   compiler: Compiler | undefined
   targetName: string
-  hre: any
   
-  constructor(targetName: string, chainID: string, provider: ethers.providers.Provider, hre: any, compiler?: Compiler) {
+  constructor(targetName: string, chainID: string, provider: ethers.providers.Provider, compiler?: Compiler) {
     this.oracle = new Oracle(chainID, provider);
     this.compiler = compiler;
     this.targetName = targetName;
-    this.hre = hre;
   }
 
 
@@ -43,12 +41,14 @@ class Query implements IQuery {
 
 
 
-
+/*
+  Only difference between HardhatDependentQuery and Query, is the former takes a HardhatDependentCompiler whereas
+  the latter takes any compiler.
+*/
 
 class HardhatDependentQuery extends Query {
-  constructor(targetName: string, chainID: string, provider: ethers.providers.Provider, hre: any) {
-    super(targetName, chainID, provider, hre);
-    this.compiler = new HardhatDependentCompiler(hre);
+  constructor(targetName: string, chainID: string, provider: ethers.providers.Provider, compiler: HardhatDependentCompiler) {
+    super(targetName, chainID, provider, compiler);
   }
 }
 

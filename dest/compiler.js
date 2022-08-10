@@ -15,20 +15,16 @@ const solc = require('solc');
     Wrapper class for full compiler implementations.
 */
 class Compiler {
-    constructor(hre) {
-        this.hre = hre;
-    }
     compileFromTarget(targetName) {
         return new Promise((resolve, reject) => null);
     }
 }
 exports.Compiler = Compiler;
 class HardhatDependentCompiler extends Compiler {
-    /*
-        Since we do not care about anything other than the bytecode, since
-        the bytecode is the only component we send to the Oracle contract,
-        we discard the ContractFactory object and only keep the bytecode.
-    */
+    constructor(hre) {
+        super();
+        this.hre = hre;
+    }
     compileFromTarget(targetName) {
         return __awaiter(this, void 0, void 0, function* () {
             const bytecodePromise = this.hre.ethers.getContractFactory(targetName)
@@ -42,6 +38,10 @@ class HardhatDependentCompiler extends Compiler {
 }
 exports.HardhatDependentCompiler = HardhatDependentCompiler;
 class StandaloneCompiler extends Compiler {
+    /*
+      UNDER DEVELOPMENT.
+      To be used to compile queries independlty of hardhat.
+    */
     compileFromTarget(targetName) {
         var input = {
             language: 'Solidity',

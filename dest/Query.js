@@ -11,13 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HardhatDependentQuery = exports.Query = void 0;
 const Oracle_1 = require("./Oracle");
-const Compiler_1 = require("./Compiler");
 class Query {
-    constructor(targetName, chainID, provider, hre, compiler) {
+    constructor(targetName, chainID, provider, compiler) {
         this.oracle = new Oracle_1.Oracle(chainID, provider);
         this.compiler = compiler;
         this.targetName = targetName;
-        this.hre = hre;
     }
     run() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,10 +29,13 @@ class Query {
     }
 }
 exports.Query = Query;
+/*
+  Only difference between HardhatDependentQuery and Query, is the former takes a HardhatDependentCompiler whereas
+  the latter takes any compiler.
+*/
 class HardhatDependentQuery extends Query {
-    constructor(targetName, chainID, provider, hre) {
-        super(targetName, chainID, provider, hre);
-        this.compiler = new Compiler_1.HardhatDependentCompiler(hre);
+    constructor(targetName, chainID, provider, compiler) {
+        super(targetName, chainID, provider, compiler);
     }
 }
 exports.HardhatDependentQuery = HardhatDependentQuery;
