@@ -11,10 +11,5 @@ module.exports = {
     Query,
     HardhatDependentQuery,
     HardhatDependentCompiler,
-    StandaloneCompiler,
     Oracle,
-    StringQueryParser,
-    FileQueryParser, 
-    QueryArtifact, 
-    CatcherArtifact
 };

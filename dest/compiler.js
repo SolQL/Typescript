@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StandaloneCompiler = exports.HardhatDependentCompiler = exports.Compiler = void 0;
+exports.HardhatDependentCompiler = exports.Compiler = void 0;
 const solc = require('solc');
 /*
     Wrapper class for full compiler implementations.
@@ -37,44 +37,3 @@ class HardhatDependentCompiler extends Compiler {
     }
 }
 exports.HardhatDependentCompiler = HardhatDependentCompiler;
-class StandaloneCompiler extends Compiler {
-    /*
-      UNDER DEVELOPMENT.
-      To be used to compile queries independlty of hardhat.
-    */
-    compileFromTarget(targetName) {
-        var input = {
-            language: 'Solidity',
-            sources: {
-                'test.sol': {
-                    content: 'import "lib.sol"; contract C { function f() public { L.f(); } }'
-                }
-            },
-            settings: {
-                outputSelection: {
-                    '*': {
-                        '*': ['*']
-                    }
-                }
-            }
-        };
-        // New syntax (supported from 0.5.12, mandatory from 0.6.0)
-        var output = JSON.parse(solc.compile(JSON.stringify(input), { import: this.findImports }));
-        // `output` here contains the JSON output as specified in the documentation
-        for (var contractName in output.contracts['test.sol']) {
-            console.log(contractName +
-                ': ' +
-                output.contracts['test.sol'][contractName].evm.bytecode.object);
-        }
-        return new Promise((res, rej) => null);
-    }
-    findImports(path) {
-        if (path === 'lib.sol')
-            return {
-                contents: 'library L { function f() internal returns (uint) { return 7; } }'
-            };
-        else
-            return { error: 'File not found' };
-    }
-}
-exports.StandaloneCompiler = StandaloneCompiler;
