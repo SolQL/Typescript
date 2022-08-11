@@ -60,4 +60,4 @@ class HardhatDependentCompiler extends Compiler {
 
 
 
-export { Compiler, HardhatDependentCompiler, StandaloneCompiler };
+export { Compiler, HardhatDependentCompiler };
