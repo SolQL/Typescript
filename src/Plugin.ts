@@ -32,6 +32,7 @@ async function solqlAction(args: pluginArgs, hre: HardhatRuntimeEnvironment) {
 
     const solql = new SolQL(contractName, chainId, provider, hre);
     const result = await solql.query.run();
+    console.log(result);
     return result;
 }
 
