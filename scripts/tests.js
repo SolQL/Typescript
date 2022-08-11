@@ -4,7 +4,7 @@ const {
   HardhatDependentQuery,
   HardhatDependentCompiler,
   Oracle,
-  StandaloneCompiler
+  SolQL
 } = require("../dest/index");
 
 
@@ -55,8 +55,17 @@ async function testHardhatDependentQuery(providerUrl, queryContractName, chainId
 }
 
 
+async function testSolQL(providerUrl, queryContractName, chainId, hre) {
+  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+  const solql = new SolQL(queryContractName, chainId, provider, hre);
+  const result = await solql.query.run();
+
+  return result;
+}
 
 
 
 
-module.exports = { testHardhatDependentQuery };
+
+
+module.exports = { testHardhatDependentQuery, testSolQL };

@@ -1,13 +1,11 @@
-const { Query, HardhatDependentQuery } = require("./Query");
-const { HardhatDependentCompiler, StandaloneCompiler } = require("./Compiler")
-const { Oracle } = require("./Oracle");
+const { loadSolQLPlugin } = require('./Plugin');
+const { SolQL } = require("./SolQL");
+
 
 
 
 
 module.exports = {
-    Query,
-    HardhatDependentQuery,
-    HardhatDependentCompiler,
-    Oracle,
+    SolQL,
+    loadSolQLPlugin
 };

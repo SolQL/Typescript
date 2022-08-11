@@ -1,10 +1,10 @@
-const { testHardhatDependentQuery } = require('./tests')
+const { testSolQL } = require('./tests')
 const { time } = require('../dest/benchmark');
 const hre = require('hardhat');
 
 
 async function main() {
-    const firstResult = await time(() => testHardhatDependentQuery(process.env.GOERLI_URL, "Query", "5"), 'solql time');
+    const firstResult = await time(() => testSolQL(process.env.GOERLI_URL, "Query", "5", hre), 'solql time');
 
     const hardhatFork = await time(hardhatForking, 'hardhat forking time');
 
