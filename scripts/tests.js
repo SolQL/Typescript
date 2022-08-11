@@ -47,7 +47,8 @@ async function testQuery(providerUrl, queryContractName, chainId) {
 
 async function testHardhatDependentQuery(providerUrl, queryContractName, chainId) {
   const provider = new ethers.providers.JsonRpcProvider(providerUrl);
-  const query = new HardhatDependentQuery(queryContractName, chainId, provider, hre);
+  const compiler = new HardhatDependentCompiler(hre);
+  const query = new HardhatDependentQuery(queryContractName, chainId, provider, compiler);
 
   const result = await query.run();
   return result;
