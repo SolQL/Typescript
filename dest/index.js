@@ -1,4 +1,4 @@
-const { loadSolQLPlugin } = require('./Plugin');
+const { addSolQLPlugin } = require('./Plugin');
 const { SolQL } = require("./SolQL");
 
 
@@ -7,5 +7,5 @@ const { SolQL } = require("./SolQL");
 
 module.exports = {
     SolQL,
-    loadSolQLPlugin
+    addSolQLPlugin
 };

@@ -13,6 +13,9 @@ exports.addSolQLPlugin = void 0;
 const config_1 = require("hardhat/config");
 const ethers_1 = require("ethers");
 const SolQL_1 = require("./SolQL");
+/*
+    Is called when "npx hardhat solql --contract-name <name> --network-name <network>" is run.
+*/
 function solqlAction(args, hre) {
     return __awaiter(this, void 0, void 0, function* () {
         const { contractName, networkName } = args;
@@ -24,12 +27,18 @@ function solqlAction(args, hre) {
         return result;
     });
 }
+/*
+    Is the hardhat task added to the config file which defines npx hardhat solql .. commands.
+*/
 function addSolQLPlugin() {
     (0, config_1.task)("solql", (args, hre) => solqlAction(args, hre))
         .addParam('contractName', 'The query contract name')
         .addParam('networkName', 'Name of network as specified in your hardhat config file');
 }
 exports.addSolQLPlugin = addSolQLPlugin;
+/*
+    Is called within the defined hardhat solql task to retrieve the provider url.
+*/
 function getProviderUrl(hre, networkName) {
     if (hre.userConfig === undefined) {
         throw new HardhatConfigError('Could not find hardhat.config.js file.');
