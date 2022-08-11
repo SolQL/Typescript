@@ -1,6 +1,6 @@
 {
   "name": "solql",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "sha256yan",
   "main": "dest/index.js",
   "devDependencies": {
