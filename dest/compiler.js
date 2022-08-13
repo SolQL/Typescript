@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HardhatDependentCompiler = exports.Compiler = void 0;
 const solc = require('solc');
+const Errors_1 = require("./Errors");
 /*
     Wrapper class for full compiler implementations.
 */
@@ -20,6 +21,23 @@ class Compiler {
     }
 }
 exports.Compiler = Compiler;
+function contractIsQueryContract(contractFactory) {
+    const functionFragment = contractFactory.interface.functions['query()'];
+    if (functionFragment === undefined) {
+        throw new Errors_1.ContractCompatibilityError();
+    }
+    const name = functionFragment.name;
+    if (name === undefined) {
+        throw new Errors_1.ContractCompatibilityError();
+    }
+    const outputs = functionFragment.outputs;
+    if (outputs.length !== 1) {
+        throw new Errors_1.ContractCompatibilityError();
+    }
+    if (outputs[0].type !== 'bytes') {
+        throw new Errors_1.ContractCompatibilityError();
+    }
+}
 class HardhatDependentCompiler extends Compiler {
     constructor(hre) {
         super();
@@ -28,7 +46,10 @@ class HardhatDependentCompiler extends Compiler {
     compileFromTarget(targetName) {
         return __awaiter(this, void 0, void 0, function* () {
             const bytecodePromise = this.hre.ethers.getContractFactory(targetName)
-                .then((contractFactory) => contractFactory.bytecode)
+                .then((contractFactory) => {
+                contractIsQueryContract(contractFactory);
+                return contractFactory.bytecode;
+            })
                 .catch((error) => {
                 console.error(error);
             });

@@ -1,4 +1,5 @@
-const solc = require('solc');
+
+import { ContractCompatibilityError } from './Errors';
 
 
 
@@ -27,7 +28,29 @@ class Compiler implements ICompiler {
 
 
 
+function contractIsQueryContract(contractFactory: any) {
+    const functionFragment = contractFactory.interface.functions['query()'];
 
+    if(functionFragment === undefined) {
+        throw new ContractCompatibilityError();
+    }
+
+    const name = functionFragment.name;
+
+    if(name === undefined) {
+        throw new ContractCompatibilityError();
+    }
+
+    const outputs = functionFragment.outputs;
+
+    if(outputs.length !== 1) {
+        throw new ContractCompatibilityError();
+    }
+
+    if(outputs[0].type !== 'bytes') {
+        throw new ContractCompatibilityError();
+    }
+}
 
 
 
@@ -47,7 +70,10 @@ class HardhatDependentCompiler extends Compiler {
 
     async compileFromTarget(targetName: string): Promise<string> {
         const bytecodePromise = this.hre.ethers.getContractFactory(targetName)
-        .then((contractFactory: any) => contractFactory.bytecode)
+        .then((contractFactory: any) => {
+            contractIsQueryContract(contractFactory);
+            return contractFactory.bytecode;
+        })
         .catch((error: Error) => {
             console.error(error)
         })

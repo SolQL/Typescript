@@ -13,6 +13,7 @@ exports.addSolQLPlugin = void 0;
 const config_1 = require("hardhat/config");
 const ethers_1 = require("ethers");
 const SolQL_1 = require("./SolQL");
+const Errors_1 = require("./Errors");
 /*
     Is called when "npx hardhat solql --contract-name <name> --network-name <network>" is run.
 */
@@ -24,6 +25,7 @@ function solqlAction(args, hre) {
         const chainId = ((yield provider.getNetwork()).chainId).toString();
         const solql = new SolQL_1.SolQL(contractName, chainId, provider, hre);
         const result = yield solql.query.run();
+        console.log(result);
         return result;
     });
 }
@@ -31,7 +33,7 @@ function solqlAction(args, hre) {
     Is the hardhat task added to the config file which defines npx hardhat solql .. commands.
 */
 function addSolQLPlugin() {
-    (0, config_1.task)("solql", (args, hre) => solqlAction(args, hre))
+    (0, config_1.task)("solql", (args, hre) => __awaiter(this, void 0, void 0, function* () { return solqlAction(args, hre); }))
         .addParam('contractName', 'The query contract name')
         .addParam('networkName', 'Name of network as specified in your hardhat config file');
 }
@@ -41,18 +43,18 @@ exports.addSolQLPlugin = addSolQLPlugin;
 */
 function getProviderUrl(hre, networkName) {
     if (hre.userConfig === undefined) {
-        throw new HardhatConfigError('Could not find hardhat.config.js file.');
+        throw new Errors_1.HardhatConfigError('Could not find hardhat.config.js file.');
     }
     else if (hre.userConfig.networks == undefined) {
-        throw new HardhatConfigError('Could not find networks field of hardhat.config.js file.');
+        throw new Errors_1.HardhatConfigError('Could not find networks field of hardhat.config.js file.');
     }
     const providerInfo = hre.userConfig.networks[networkName];
     if (providerInfo === undefined) {
-        throw new HardhatConfigError(`${networkName} not specified in your hardhat.config.js file.`);
+        throw new Errors_1.HardhatConfigError(`${networkName} not specified in your hardhat.config.js file.`);
     }
     const providerLink = providerInfo.url;
     if (providerLink === undefined) {
-        throw new HardhatConfigError(`Provider url for ${networkName} not found in your hardhat.config.js file.`);
+        throw new Errors_1.HardhatConfigError(`Provider url for ${networkName} not found in your hardhat.config.js file.`);
     }
     return providerLink;
 }

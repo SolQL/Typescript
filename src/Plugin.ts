@@ -2,6 +2,7 @@ import { task } from "hardhat/config";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { ethers } from "ethers";
 import { SolQL } from "./SolQL";
+import { HardhatConfigError } from "./Errors";
 
 
 /*
@@ -45,7 +46,7 @@ async function solqlAction(args: pluginArgs, hre: HardhatRuntimeEnvironment) {
     Is the hardhat task added to the config file which defines npx hardhat solql .. commands.
 */
 function addSolQLPlugin() {
-    task("solql", (args: pluginArgs, hre: HardhatRuntimeEnvironment) => solqlAction(args, hre))
+    task("solql", async  (args: pluginArgs, hre: HardhatRuntimeEnvironment) => solqlAction(args, hre))
     .addParam('contractName', 'The query contract name')
     .addParam('networkName', 'Name of network as specified in your hardhat config file')
 }
