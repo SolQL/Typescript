@@ -1,7 +1,10 @@
 pragma solidity =0.5.16;
 
 
-import "./exampleQuery.sol";
+
+interface ISolQL {
+    function query() external returns(bytes memory results);
+}
 
 
 contract Oracle {

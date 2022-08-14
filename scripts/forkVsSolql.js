@@ -5,10 +5,9 @@ const hre = require('hardhat');
 
 async function main() {
     const firstResult = await time(() => testSolQL(process.env.GOERLI_URL, "Query", "5", hre), 'solql time');
+    console.log(firstResult);
 
     const hardhatFork = await time(hardhatForking, 'hardhat forking time');
-
-    console.log(firstResult);
     console.log(hardhatFork);
 }
 
