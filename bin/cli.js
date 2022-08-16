@@ -16,8 +16,14 @@ const runCommand = (command) => {
 }
 
 
-const gitClone = `git clone https://github.com/SolQL/Typescript`;
-const installDeps = `npm i`;
+const repoName = process.argv[2];
+if(repoName === undefined) {
+    console.error('Please enter your target directory. (npx solql <TARGET_DIR>)');
+    process.exit(1);
+}
+
+const gitClone = `git clone https://github.com/SolQL/Typescript ${repoName}`;
+const installDeps = `cd ${repoName} && npm i`;
 
 console.log(`Cloning the repository...`);
 const cloned = runCommand(gitClone);

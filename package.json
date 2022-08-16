@@ -1,10 +1,10 @@
 {
   "name": "solql",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "author": "sha256yan",
   "main": "dest/index.js",
   "license": "MIT",
-  "bin": "./bin/cli/js",
+  "bin": "./bin/cli.js",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
@@ -14,7 +14,6 @@
     "hardhat": "^2.9.9"
   },
   "dependencies": {
-    "dotenv": "^16.0.1",
-    "solc": "^0.8.15"
+    "dotenv": "^16.0.1"
   }
 }
