@@ -1,6 +1,6 @@
 {
   "name": "solql",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "author": "sha256yan",
   "main": "dest/index.js",
   "license": "MIT",

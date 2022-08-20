@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HardhatDependentCompiler = exports.Compiler = void 0;
-const solc = require('solc');
 const Errors_1 = require("./Errors");
 /*
     Wrapper class for full compiler implementations.

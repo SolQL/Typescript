@@ -22,7 +22,7 @@ if(repoName === undefined) {
     process.exit(1);
 }
 
-const gitClone = `git clone https://github.com/SolQL/Typescript ${repoName}`;
+const gitClone = `git clone https://github.com/SolQL/solql-workspace ${repoName}`;
 const installDeps = `cd ${repoName} && npm i`;
 
 console.log(`Cloning the repository...`);
